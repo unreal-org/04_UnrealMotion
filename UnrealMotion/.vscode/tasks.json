@@ -1,0 +1,977 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "UnrealMotion Win32 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win32 Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win32 DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win32 Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Shipping Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win32 Shipping Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Test Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win32 Test Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win32 Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win32",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win64 Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win64 DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win64 Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Shipping Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win64 Shipping Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Test Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Win64 Test Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Win64 Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Win64",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Android Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Android DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Android Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Shipping Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Shipping Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Android Shipping Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Shipping Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Shipping",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Test Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Test Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotion Android Test Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotion Android Test Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotion",
+				"Android",
+				"Test",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Debug Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Debug Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotionEditor Win64 Debug Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Debug Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Debug",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 DebugGame Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 DebugGame Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotionEditor Win64 DebugGame Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 DebugGame Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"DebugGame",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Development Build",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Development Rebuild",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Build.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"dependsOn": [
+				"UnrealMotionEditor Win64 Development Clean"
+			],
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		},
+		{
+			"label": "UnrealMotionEditor Win64 Development Clean",
+			"group": "build",
+			"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+			"args": [
+				"UnrealMotionEditor",
+				"Win64",
+				"Development",
+				"C:\\Users\\kevin\\Documents\\Unreal Projects\\Repository\\04_UnrealMotion\\UnrealMotion\\UnrealMotion.uproject",
+				"-waitmutex"
+			],
+			"problemMatcher": "$msCompile",
+			"type": "shell",
+			"options": {
+				"cwd": "C:\\Program Files\\Epic Games\\UE_4.24"
+			}
+		}
+	]
+}
