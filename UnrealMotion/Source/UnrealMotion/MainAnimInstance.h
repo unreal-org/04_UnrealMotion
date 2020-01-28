@@ -2,11 +2,14 @@
 
 #pragma once
 
+#include "Kismet/KismetSystemLibrary.h"
+
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
 #include "MainAnimInstance.generated.h"
 
 class UCapsuleComponent;
+class AActor;
 
 /**
  * 
@@ -54,6 +57,7 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaTimeX) override;
 
 private:
+	// Capsule Component
 	UCapsuleComponent* CapsuleComponent = nullptr;
 
 	// State Machine
@@ -64,4 +68,7 @@ private:
 	FCollisionQueryParams TraceParameters;
 	FVector IKFootTrace(int32 Foot);
 
+	// Head Trace
+	void SphereTrace();
+	TArray<AActor*> IgnoredActors;
 };

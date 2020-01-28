@@ -3,12 +3,17 @@
 #include "MainAnimInstance.h"
 #include "Animation/AnimNode_StateMachine.h"
 #include "Components/CapsuleComponent.h"
+#include "Engine/StaticMeshActor.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Engine/EngineTypes.h"
+#include "EngineUtils.h"
 
 // Constructors
 UMainAnimInstance::UMainAnimInstance(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer)
-{}
+{
+    //SphereTraceBase = UKismetSystemLibrary(ObjectInitializer);
+}
 
 void UMainAnimInstance::NativeInitializeAnimation()
 {
@@ -21,31 +26,35 @@ void UMainAnimInstance::NativeInitializeAnimation()
     TraceParameters.AddIgnoredComponent(Cast<UPrimitiveComponent>(GetSkelMeshComponent()));
     TraceParameters.AddIgnoredActor(Cast<AActor>(GetSkelMeshComponent()->GetOwner()));
 
-    LeftFootLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("ik_foot_l")));
-    RightFootLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("ik_foot_r")));
-
+    MainState = GetStateMachineInstanceFromName(FName(TEXT("MainState")));
     CapsuleComponent = GetSkelMeshComponent()->GetOwner()->FindComponentByClass<UCapsuleComponent>();
+
+    for (TActorIterator<AStaticMeshActor> It(GetWorld()); It; ++It)
+	{
+		AStaticMeshActor* Target = *It;
+		IgnoredActors.Add(Target);
+	}
+
 }
 
 void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 {
-    if (!ensure(GetSkelMeshComponent())) { return; }
     if (!ensure(MainState)) { return; }
 
+    // UE_LOG(LogTemp, Warning, TEXT("%i"), MainState->GetCurrentState())
     switch (MainState->GetCurrentState())
     {
         case 0: // Idle
-            // TODO: Disable IK when not necessary
-            //LeftFootLocation = IKFootTrace(0);
-            //RightFootLocation = IKFootTrace(1);
+            LeftFootLocation = IKFootTrace(0);
+            RightFootLocation = IKFootTrace(1);
             break;
     }
 }
 
 void UMainAnimInstance::AnimNotify_IdleEntry()
 {
-    // LeftIKAlpha = 1;
-    // RightIKAlpha = 1;
+    LeftIKAlpha = .95;
+    RightIKAlpha = .95;
 }
 
 FVector UMainAnimInstance::IKFootTrace(int32 Foot)
@@ -84,7 +93,7 @@ FVector UMainAnimInstance::IKFootTrace(int32 Foot)
     {
         if (!ensure(HitResult.GetActor())) { return FVector(0, 0, 0); }
 
-        // FootOffset Z
+        // FootOffset Z - TODO: Trigger if less than 13.5
         FootSocketLocation.Z = (HitResult.Location - HitResult.TraceEnd).Size() - 15 + 13.5;
         
         // Foot Rotations
@@ -100,4 +109,29 @@ FVector UMainAnimInstance::IKFootTrace(int32 Foot)
     }
     
     return FootSocketLocation;  // else - don't offset
+}
+
+void UMainAnimInstance::SphereTrace()
+{
+    if (!ensure(GetSkelMeshComponent())) { return; }
+
+    FVector Start = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_start")));
+    FVector End = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_end")));
+    FHitResult HitResult(ForceInit);
+
+    bool Trace = UKismetSystemLibrary::SphereTraceSingle(
+        GetWorld(),
+        Start,
+        End,
+        50,
+        ETraceTypeQuery::TraceTypeQuery1,
+        false,
+        IgnoredActors,
+        EDrawDebugTrace::None,
+        HitResult,
+        true,
+        FLinearColor(0, 0, 0, 0),
+        FLinearColor(1, 1, 1, 1),
+        1
+    );
 }
