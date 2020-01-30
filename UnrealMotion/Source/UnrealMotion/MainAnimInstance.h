@@ -28,6 +28,8 @@ public:
 	FVector RightFootLocation;   // world space
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
 	FVector LeftFootLocation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FRotator NeckRotation;    // world space
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
 	FVector RightJointTargetLocation;   // world space
@@ -63,12 +65,19 @@ private:
 	// State Machine
 	FAnimNode_StateMachine *MainState;
 
+	// Lerp
+	void TargetLerp(float DeltaTimeX, float Beta);
+
+	// Head Trace
+	void SphereTrace(float DeltaTimeX);
+	TArray<AActor*> IgnoredActors;
+	FRotator LookAtRotation;
+	float TurnTime = 0;
+	float TurnDuration = 0.3;
+
 	// Foot Trace
 	FName TraceTag = FName(TEXT("TraceTag"));
 	FCollisionQueryParams TraceParameters;
 	FVector IKFootTrace(int32 Foot);
 
-	// Head Trace
-	void SphereTrace();
-	TArray<AActor*> IgnoredActors;
 };

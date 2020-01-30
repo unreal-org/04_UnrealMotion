@@ -11,9 +11,7 @@
 // Constructors
 UMainAnimInstance::UMainAnimInstance(const FObjectInitializer &ObjectInitializer)
     : Super(ObjectInitializer)
-{
-    //SphereTraceBase = UKismetSystemLibrary(ObjectInitializer);
-}
+{}
 
 void UMainAnimInstance::NativeInitializeAnimation()
 {
@@ -47,14 +45,69 @@ void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
         case 0: // Idle
             LeftFootLocation = IKFootTrace(0);
             RightFootLocation = IKFootTrace(1);
+            SphereTrace(DeltaTimeX);
             break;
     }
+
 }
 
 void UMainAnimInstance::AnimNotify_IdleEntry()
 {
     LeftIKAlpha = .95;
     RightIKAlpha = .95;
+}
+
+void UMainAnimInstance::TargetLerp(float DeltaTimeX, float Beta)
+{
+    if (!ensure(GetSkelMeshComponent())) { return; }
+
+    // Turn towards Traced Object
+    // TODO : ClampNeck
+    TurnTime = 0;
+    if (TurnTime < TurnDuration)
+    {
+        TurnTime += DeltaTimeX;
+        NeckRotation = FMath::Lerp(NeckRotation, LookAtRotation, TurnTime / Beta);
+    }
+    
+}
+
+void UMainAnimInstance::SphereTrace(float DeltaTimeX)
+{
+    if (!ensure(GetSkelMeshComponent())) { return; }
+
+    FVector Start = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_start")));
+    FVector End = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_end")));
+    FHitResult TraceResult(ForceInit);
+
+    bool Trace = UKismetSystemLibrary::SphereTraceSingle(
+        GetWorld(),
+        Start,
+        End,
+        150,
+        ETraceTypeQuery::TraceTypeQuery1,
+        false,
+        IgnoredActors,
+        EDrawDebugTrace::ForOneFrame,
+        TraceResult,
+        true,
+        FLinearColor(0, 0, 255, 1),
+        FLinearColor(0, 255, 0, 1),
+        1
+    );
+
+    if (Trace) {
+        if (!ensure(TraceResult.GetActor())) { return; }
+
+        FVector Neck = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("neck_01")));
+        LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceResult.GetActor()->GetActorLocation());
+
+    } else {
+        LookAtRotation = FRotator(0, 0, 0);
+    }
+
+    TargetLerp(DeltaTimeX, 0.5);
+    return;
 }
 
 FVector UMainAnimInstance::IKFootTrace(int32 Foot)
@@ -109,29 +162,4 @@ FVector UMainAnimInstance::IKFootTrace(int32 Foot)
     }
     
     return FootSocketLocation;  // else - don't offset
-}
-
-void UMainAnimInstance::SphereTrace()
-{
-    if (!ensure(GetSkelMeshComponent())) { return; }
-
-    FVector Start = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_start")));
-    FVector End = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("sphere_trace_end")));
-    FHitResult HitResult(ForceInit);
-
-    bool Trace = UKismetSystemLibrary::SphereTraceSingle(
-        GetWorld(),
-        Start,
-        End,
-        50,
-        ETraceTypeQuery::TraceTypeQuery1,
-        false,
-        IgnoredActors,
-        EDrawDebugTrace::None,
-        HitResult,
-        true,
-        FLinearColor(0, 0, 0, 0),
-        FLinearColor(1, 1, 1, 1),
-        1
-    );
 }
