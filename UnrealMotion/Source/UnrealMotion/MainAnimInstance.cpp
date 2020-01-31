@@ -7,6 +7,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Engine/EngineTypes.h"
 #include "EngineUtils.h"
+#include "Containers/Array.h"
 
 // Constructors
 UMainAnimInstance::UMainAnimInstance(const FObjectInitializer &ObjectInitializer)
@@ -33,6 +34,10 @@ void UMainAnimInstance::NativeInitializeAnimation()
 		IgnoredActors.Add(Target);
 	}
 
+    Spine.Add(FJoint(FName(TEXT("neck_01")), FRotator(50, 90, 75)));
+    Spine.Add(FJoint(FName(TEXT("spine_03")), FRotator(25, 45, 50)));
+    Spine.Add(FJoint(FName(TEXT("spine_02")), FRotator(10, 25, 25)));
+    Spine.Add(FJoint(FName(TEXT("spine_01")), FRotator(5, 15, 10)));
 }
 
 void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
@@ -59,17 +64,52 @@ void UMainAnimInstance::AnimNotify_IdleEntry()
 
 void UMainAnimInstance::TargetLerp(float DeltaTimeX, float Beta)
 {
-    if (!ensure(GetSkelMeshComponent())) { return; }
+    // Clamp Angles
+    RecursiveClamp(Spine, 0);
 
-    // Turn towards Traced Object
-    // TODO : ClampNeck
     TurnTime = 0;
     if (TurnTime < TurnDuration)
     {
         TurnTime += DeltaTimeX;
-        NeckRotation = FMath::Lerp(NeckRotation, LookAtRotation, TurnTime / Beta);
+        NeckRotation = FMath::Lerp(NeckRotation, Spine[0].TargetJointRotation, TurnTime / Beta);
+        Spine3Rotation = FMath::Lerp(Spine3Rotation, Spine[1].TargetJointRotation, TurnTime / Beta);
+        Spine2Rotation = FMath::Lerp(Spine2Rotation, Spine[2].TargetJointRotation, TurnTime / Beta);
+        Spine1Rotation = FMath::Lerp(Spine1Rotation, Spine[3].TargetJointRotation, TurnTime / Beta);
     }
-    
+}
+
+void UMainAnimInstance::RecursiveClamp(TArray<FJoint> BoneChain, int i)
+{
+    FRotator InitialTargetRotation = BoneChain[i].TargetJointRotation; 
+    RotatorClamp(BoneChain[i].TargetJointRotation, BoneChain[i].ClampRotation);
+
+    if (i + 1 == BoneChain.Num()) { return; }
+
+    if (abs(BoneChain[i].TargetJointRotation.Pitch) == BoneChain[i].ClampRotation.Pitch
+        || abs(BoneChain[i].TargetJointRotation.Yaw) == BoneChain[i].ClampRotation.Yaw
+        || abs(BoneChain[i].TargetJointRotation.Roll) == BoneChain[i].ClampRotation.Roll)
+    {
+        if (abs(TargetNeckRotation.Pitch) == BoneChain[i].ClampRotation.Pitch) {
+            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Pitch;
+        }
+        if (abs(TargetNeckRotation.Yaw) == BoneChain[i].ClampRotation.Yaw) {
+            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Yaw;
+        }
+        if (abs(TargetNeckRotation.Roll) == BoneChain[i].ClampRotation.Roll) {
+            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Roll;
+        }
+    } else {
+        BoneChain[i+1].TargetJointRotation = FRotator(0, 0, 0);
+    }
+
+    RecursiveClamp(BoneChain, i+1);
+}
+
+void UMainAnimInstance::RotatorClamp(FRotator TargetRotator, FRotator ClampRotator)
+{
+    TargetRotator.Pitch = FMath::ClampAngle(TargetRotator.Pitch, -ClampRotator.Pitch, ClampRotator.Pitch);
+    TargetRotator.Yaw = FMath::ClampAngle(TargetRotator.Yaw, -ClampRotator.Yaw, ClampRotator.Yaw);
+    TargetRotator.Roll = FMath:: ClampAngle(TargetRotator.Roll, -ClampRotator.Roll, ClampRotator.Roll);
 }
 
 void UMainAnimInstance::SphereTrace(float DeltaTimeX)
@@ -92,7 +132,7 @@ void UMainAnimInstance::SphereTrace(float DeltaTimeX)
         TraceResult,
         true,
         FLinearColor(0, 0, 255, 1),
-        FLinearColor(0, 255, 0, 1),
+        FLinearColor(255, 0, 0, 1),
         1
     );
 
@@ -100,10 +140,10 @@ void UMainAnimInstance::SphereTrace(float DeltaTimeX)
         if (!ensure(TraceResult.GetActor())) { return; }
 
         FVector Neck = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("neck_01")));
-        LookAtRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceResult.GetActor()->GetActorLocation());
+        Spine[0].TargetJointRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceResult.GetActor()->GetActorLocation());
 
     } else {
-        LookAtRotation = FRotator(0, 0, 0);
+        Spine[0].TargetJointRotation = FRotator(0, 0, 0);
     }
 
     TargetLerp(DeltaTimeX, 0.5);

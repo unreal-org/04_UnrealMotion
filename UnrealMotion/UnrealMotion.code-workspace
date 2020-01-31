@@ -13,7 +13,9 @@
 		"typescript.tsc.autoDetect": "off",
 		"files.associations": {
 			"__config": "cpp",
-			"__nullptr": "cpp"
+			"__nullptr": "cpp",
+			"chrono": "cpp",
+			"cstdlib": "cpp"
 		}
 	},
 	"extensions": {

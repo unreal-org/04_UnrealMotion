@@ -11,6 +11,29 @@
 class UCapsuleComponent;
 class AActor;
 
+USTRUCT()
+struct FJoint
+{
+	GENERATED_BODY()
+
+	UPROPERTY()
+	FName JointName;
+
+	UPROPERTY()
+	FRotator TargetJointRotation;
+
+	UPROPERTY()
+	FRotator ClampRotation;
+
+	FJoint() {}
+
+	FJoint(FName Name, FRotator Clamp)
+	{
+		JointName = Name;
+		ClampRotation = Clamp;
+	}
+};
+
 /**
  * 
  */
@@ -30,6 +53,12 @@ public:
 	FVector LeftFootLocation;    // world space
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
 	FRotator NeckRotation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FRotator Spine3Rotation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FRotator Spine2Rotation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FRotator Spine1Rotation;    // world space
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
 	FVector RightJointTargetLocation;   // world space
@@ -67,13 +96,18 @@ private:
 
 	// Lerp
 	void TargetLerp(float DeltaTimeX, float Beta);
+	float TurnTime = 0;
+	float TurnDuration = 0.3;
+
+	// Clamp
+	void RotatorClamp(FRotator TargetRotator, FRotator ClampRotator);
+	void RecursiveClamp(TArray<FJoint> BoneChain, int i);
+	TArray<FJoint> Spine;
 
 	// Head Trace
 	void SphereTrace(float DeltaTimeX);
 	TArray<AActor*> IgnoredActors;
-	FRotator LookAtRotation;
-	float TurnTime = 0;
-	float TurnDuration = 0.3;
+	FRotator TargetNeckRotation;
 
 	// Foot Trace
 	FName TraceTag = FName(TEXT("TraceTag"));
