@@ -27,9 +27,10 @@ struct FJoint
 
 	FJoint() {}
 
-	FJoint(FName Name, FRotator Clamp)
+	FJoint(FName Name, FRotator Joint, FRotator Clamp)
 	{
 		JointName = Name;
+		TargetJointRotation = Joint;
 		ClampRotation = Clamp;
 	}
 };
@@ -51,6 +52,21 @@ public:
 	FVector RightFootLocation;   // world space
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
 	FVector LeftFootLocation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
+	FVector LeftKneeTargetLocation;   // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
+	FVector RightKneeTargetLocation;    // world space
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FVector RightHandLocation;   // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
+	FVector LeftHandLocation;    // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
+	FVector LeftElbowTargetLocation;   // world space
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
+	FVector RightElbowTargetLocation;    // world space
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
 	FRotator NeckRotation;    // world space
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
@@ -60,11 +76,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Body Parts")
 	FRotator Spine1Rotation;    // world space
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
-	FVector RightJointTargetLocation;   // world space
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Targets")
-	FVector LeftJointTargetLocation;    // world space
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Rotations")
 	FRotator RightFootRotation;   // world space
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Joint Rotations")
@@ -72,9 +84,14 @@ public:
 
 	// IK Alpha
 	UPROPERTY(BlueprintReadOnly, Category= "IK Alpha")
-	float LeftIKAlpha = 0;
+	float LeftFootIKAlpha = 0;
 	UPROPERTY(BlueprintReadOnly, Category= "IK Alpha")
-	float RightIKAlpha = 0;
+	float RightFootIKAlpha = 0;
+	UPROPERTY(BlueprintReadOnly, Category= "IK Alpha")
+	float LeftHandIKAlpha = 0;
+	UPROPERTY(BlueprintReadOnly, Category= "IK Alpha")
+	float RightHandIKAlpha = 0;
+
 
 	// Transition Events
 	UFUNCTION(BlueprintCallable)
@@ -96,12 +113,12 @@ private:
 
 	// Lerp
 	void TargetLerp(float DeltaTimeX, float Beta);
-	float TurnTime = 0;
-	float TurnDuration = 0.3;
+	float LerpTime = 0;
+	float LerpDuration = 0.3;
 
 	// Clamp
-	void RotatorClamp(FRotator TargetRotator, FRotator ClampRotator);
-	void RecursiveClamp(TArray<FJoint> BoneChain, int i);
+	FRotator RotatorClamp(FRotator TargetRotator, FRotator RotatorClamp);
+	FRotator RotationAdjust(TArray<FJoint> BoneChain, int i, FRotator InitialTargetRotation);
 	TArray<FJoint> Spine;
 
 	// Head Trace
@@ -114,4 +131,16 @@ private:
 	FCollisionQueryParams TraceParameters;
 	FVector IKFootTrace(int32 Foot);
 
+	// Hand Trace
+	void IKHands(float DeltaTimeX);
+	void TargetInterp(FVector LeftHandInterpTo, FVector RightHandInterpTo, float DeltaTimeX);
+	float InterpTime = 0;
+	float InterpDuration = 0.3;
+	float InterpSpeed = 2;
+
+	// Threat Variable
+	float Threat = 0;
+	float ThreatMin = 0;
+	float ThreatMax = 50;
+	FVector ThreatVector;
 };

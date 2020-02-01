@@ -21,12 +21,12 @@ void UMainAnimInstance::NativeInitializeAnimation()
     if (!ensure(GetSkelMeshComponent())) { return; }
     if (!ensure(GetSkelMeshComponent()->GetOwner())) { return; }
 
+    MainState = GetStateMachineInstanceFromName(FName(TEXT("MainState")));
+    CapsuleComponent = GetSkelMeshComponent()->GetOwner()->FindComponentByClass<UCapsuleComponent>();
+
     TraceParameters = FCollisionQueryParams(TraceTag, false);
     TraceParameters.AddIgnoredComponent(Cast<UPrimitiveComponent>(GetSkelMeshComponent()));
     TraceParameters.AddIgnoredActor(Cast<AActor>(GetSkelMeshComponent()->GetOwner()));
-
-    MainState = GetStateMachineInstanceFromName(FName(TEXT("MainState")));
-    CapsuleComponent = GetSkelMeshComponent()->GetOwner()->FindComponentByClass<UCapsuleComponent>();
 
     for (TActorIterator<AStaticMeshActor> It(GetWorld()); It; ++It)
 	{
@@ -34,10 +34,10 @@ void UMainAnimInstance::NativeInitializeAnimation()
 		IgnoredActors.Add(Target);
 	}
 
-    Spine.Add(FJoint(FName(TEXT("neck_01")), FRotator(50, 90, 75)));
-    Spine.Add(FJoint(FName(TEXT("spine_03")), FRotator(25, 45, 50)));
-    Spine.Add(FJoint(FName(TEXT("spine_02")), FRotator(10, 25, 25)));
-    Spine.Add(FJoint(FName(TEXT("spine_01")), FRotator(5, 15, 10)));
+    Spine.Add(FJoint(FName(TEXT("neck_01")), FRotator(0, 0, 0), FRotator(45, 70, 60)));
+    Spine.Add(FJoint(FName(TEXT("spine_03")), FRotator(0, 0, 0), FRotator(25, 30, 30)));
+    Spine.Add(FJoint(FName(TEXT("spine_02")), FRotator(0, 0, 0), FRotator(10, 20, 20)));
+    Spine.Add(FJoint(FName(TEXT("spine_01")), FRotator(0, 0, 0), FRotator(5, 10, 10)));
 }
 
 void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
@@ -50,6 +50,7 @@ void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
         case 0: // Idle
             LeftFootLocation = IKFootTrace(0);
             RightFootLocation = IKFootTrace(1);
+            IKHands(DeltaTimeX);
             SphereTrace(DeltaTimeX);
             break;
     }
@@ -58,58 +59,80 @@ void UMainAnimInstance::NativeUpdateAnimation(float DeltaTimeX)
 
 void UMainAnimInstance::AnimNotify_IdleEntry()
 {
-    LeftIKAlpha = .95;
-    RightIKAlpha = .95;
+    LeftFootIKAlpha = .95;
+    RightFootIKAlpha = .95;
+    LeftHandIKAlpha = .2;
+    RightHandIKAlpha = .2;
 }
 
 void UMainAnimInstance::TargetLerp(float DeltaTimeX, float Beta)
 {
     // Clamp Angles
-    RecursiveClamp(Spine, 0);
+    FRotator TargetRotation = TargetNeckRotation;
+    FRotator Sway = FRotator(-ThreatVector.X * 15, 0, ThreatVector.Y * 15);  
 
-    TurnTime = 0;
-    if (TurnTime < TurnDuration)
+    Spine[0].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
+    TargetRotation = RotationAdjust(Spine, 0, TargetRotation);
+    Spine[1].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation) + Sway;
+    TargetRotation = RotationAdjust(Spine, 1, TargetRotation);
+    Spine[2].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
+    TargetRotation = RotationAdjust(Spine, 2, TargetRotation);
+    Spine[3].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
+
+    LerpTime = 0;
+    if (LerpTime < LerpDuration)
     {
-        TurnTime += DeltaTimeX;
-        NeckRotation = FMath::Lerp(NeckRotation, Spine[0].TargetJointRotation, TurnTime / Beta);
-        Spine3Rotation = FMath::Lerp(Spine3Rotation, Spine[1].TargetJointRotation, TurnTime / Beta);
-        Spine2Rotation = FMath::Lerp(Spine2Rotation, Spine[2].TargetJointRotation, TurnTime / Beta);
-        Spine1Rotation = FMath::Lerp(Spine1Rotation, Spine[3].TargetJointRotation, TurnTime / Beta);
+        LerpTime += DeltaTimeX;
+        NeckRotation = FMath::Lerp(NeckRotation, Spine[0].TargetJointRotation, LerpTime / 0.25);
+        Spine3Rotation = FMath::Lerp(Spine3Rotation, Spine[1].TargetJointRotation, LerpTime / 0.4);
+        Spine2Rotation = FMath::Lerp(Spine2Rotation, Spine[2].TargetJointRotation, LerpTime / 0.45);
+        Spine1Rotation = FMath::Lerp(Spine1Rotation, Spine[3].TargetJointRotation, LerpTime / Beta);
     }
 }
 
-void UMainAnimInstance::RecursiveClamp(TArray<FJoint> BoneChain, int i)
-{
-    FRotator InitialTargetRotation = BoneChain[i].TargetJointRotation; 
-    RotatorClamp(BoneChain[i].TargetJointRotation, BoneChain[i].ClampRotation);
-
-    if (i + 1 == BoneChain.Num()) { return; }
+FRotator UMainAnimInstance::RotationAdjust(TArray<FJoint> BoneChain, int i, FRotator InitialTargetRotation)
+{   
+    if (i >= BoneChain.Num()) { return InitialTargetRotation; }
 
     if (abs(BoneChain[i].TargetJointRotation.Pitch) == BoneChain[i].ClampRotation.Pitch
         || abs(BoneChain[i].TargetJointRotation.Yaw) == BoneChain[i].ClampRotation.Yaw
         || abs(BoneChain[i].TargetJointRotation.Roll) == BoneChain[i].ClampRotation.Roll)
     {
-        if (abs(TargetNeckRotation.Pitch) == BoneChain[i].ClampRotation.Pitch) {
-            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Pitch;
+        if (abs(BoneChain[i].TargetJointRotation.Pitch) == BoneChain[i].ClampRotation.Pitch) {
+            if (InitialTargetRotation.Pitch < 0) {
+                InitialTargetRotation.Pitch += BoneChain[i].ClampRotation.Pitch;
+            } else {
+                InitialTargetRotation.Pitch -= BoneChain[i].ClampRotation.Pitch;
+            }
         }
-        if (abs(TargetNeckRotation.Yaw) == BoneChain[i].ClampRotation.Yaw) {
-            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Yaw;
+        if (abs(BoneChain[i].TargetJointRotation.Yaw) == BoneChain[i].ClampRotation.Yaw) {
+            if (InitialTargetRotation.Yaw < 0) {
+                InitialTargetRotation.Yaw += BoneChain[i].ClampRotation.Yaw;
+            } else {
+                InitialTargetRotation.Yaw -= BoneChain[i].ClampRotation.Yaw;
+            }
         }
-        if (abs(TargetNeckRotation.Roll) == BoneChain[i].ClampRotation.Roll) {
-            BoneChain[i+1].TargetJointRotation.Pitch = InitialTargetRotation.Pitch - BoneChain[i].ClampRotation.Roll;
+        if (abs(BoneChain[i].TargetJointRotation.Roll) == BoneChain[i].ClampRotation.Roll) {
+            if (InitialTargetRotation.Roll < 0) {
+                InitialTargetRotation.Roll += BoneChain[i].ClampRotation.Roll;
+            } else {
+                InitialTargetRotation.Roll -= BoneChain[i].ClampRotation.Roll;
+            }
         }
     } else {
-        BoneChain[i+1].TargetJointRotation = FRotator(0, 0, 0);
+        InitialTargetRotation = FRotator(0, 0, 0);
     }
 
-    RecursiveClamp(BoneChain, i+1);
+    return InitialTargetRotation;
 }
 
-void UMainAnimInstance::RotatorClamp(FRotator TargetRotator, FRotator ClampRotator)
+FRotator UMainAnimInstance::RotatorClamp(FRotator TargetRotator, FRotator ClampRotator)
 {
     TargetRotator.Pitch = FMath::ClampAngle(TargetRotator.Pitch, -ClampRotator.Pitch, ClampRotator.Pitch);
     TargetRotator.Yaw = FMath::ClampAngle(TargetRotator.Yaw, -ClampRotator.Yaw, ClampRotator.Yaw);
     TargetRotator.Roll = FMath:: ClampAngle(TargetRotator.Roll, -ClampRotator.Roll, ClampRotator.Roll);
+
+    return TargetRotator;
 }
 
 void UMainAnimInstance::SphereTrace(float DeltaTimeX)
@@ -140,14 +163,50 @@ void UMainAnimInstance::SphereTrace(float DeltaTimeX)
         if (!ensure(TraceResult.GetActor())) { return; }
 
         FVector Neck = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("neck_01")));
-        Spine[0].TargetJointRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceResult.GetActor()->GetActorLocation());
+        FVector TraceLocation = TraceResult.GetActor()->GetActorLocation();
+        TargetNeckRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceLocation);
+
+        FVector ThreatDistance = Neck - TraceLocation;
+        if (ThreatDistance.Size() < 50 && Threat < ThreatMax) { Threat += 0.01; }
+        else if (ThreatDistance.Size() > 50 && Threat > ThreatMin) { Threat -= 0.01; }
+        ThreatVector = UKismetMathLibrary::GetDirectionUnitVector(TraceLocation, Neck);
 
     } else {
-        Spine[0].TargetJointRotation = FRotator(0, 0, 0);
+        TargetNeckRotation = FRotator(0, 0, 0);
+        ThreatVector = FVector(0, 0, 0);
+        Threat = 0;
     }
 
     TargetLerp(DeltaTimeX, 0.5);
     return;
+}
+
+// TODO : Direct hands to cover vital spots in danger
+void UMainAnimInstance::IKHands(float DeltaTimeX)
+{
+    if (!ensure(GetSkelMeshComponent())) { return; }
+
+    LeftElbowTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("elbow_target_l")));
+    RightElbowTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("elbow_target_r")));
+
+    FVector LeftHandTarget = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("hand_l")));
+    FVector RightHandTarget = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("hand_r")));
+
+    TargetInterp(LeftHandTarget, RightHandTarget, DeltaTimeX);
+
+    return;
+}
+
+void UMainAnimInstance::TargetInterp(FVector LeftHandInterpTo, FVector RightHandInterpTo, float DeltaTimeX)
+{
+    FVector LeftHandCurrent = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("hand_l")));
+    FVector RightHandCurrent = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("hand_r")));
+    
+    if (InterpTime < InterpDuration) {
+        InterpTime += DeltaTimeX;
+        LeftHandLocation = FMath::VInterpTo(LeftHandCurrent, LeftHandInterpTo, DeltaTimeX, InterpSpeed);
+        RightHandLocation = FMath::VInterpTo(RightHandCurrent, RightHandInterpTo, DeltaTimeX, InterpSpeed);
+    }
 }
 
 FVector UMainAnimInstance::IKFootTrace(int32 Foot)
@@ -159,11 +218,11 @@ FVector UMainAnimInstance::IKFootTrace(int32 Foot)
     FVector FootSocketLocation;
     if (Foot == 0) {
         FootName = FName(TEXT("foot_l"));
-        LeftJointTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("joint_target_l")));
+        LeftKneeTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("knee_target_l")));
         FootSocketLocation = GetSkelMeshComponent()->GetSocketLocation(FootName);
     } else if (Foot == 1) { 
         FootName = FName(TEXT("foot_r"));
-        RightJointTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("joint_target_r")));
+        RightKneeTargetLocation = GetSkelMeshComponent()->GetSocketLocation(FName(TEXT("knee_target_r")));
         FootSocketLocation = GetSkelMeshComponent()->GetSocketLocation(FootName);
     }
 

@@ -15,7 +15,8 @@
 			"__config": "cpp",
 			"__nullptr": "cpp",
 			"chrono": "cpp",
-			"cstdlib": "cpp"
+			"cstdlib": "cpp",
+			"*.rh": "cpp"
 		}
 	},
 	"extensions": {
