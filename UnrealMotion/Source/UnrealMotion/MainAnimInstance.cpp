@@ -34,9 +34,9 @@ void UMainAnimInstance::NativeInitializeAnimation()
 		IgnoredActors.Add(Target);
 	}
 
-    Spine.Add(FJoint(FName(TEXT("neck_01")), FRotator(0, 0, 0), FRotator(45, 70, 60)));
-    Spine.Add(FJoint(FName(TEXT("spine_03")), FRotator(0, 0, 0), FRotator(25, 30, 30)));
-    Spine.Add(FJoint(FName(TEXT("spine_02")), FRotator(0, 0, 0), FRotator(10, 20, 20)));
+    Spine.Add(FJoint(FName(TEXT("neck_01")), FRotator(0, 0, 0), FRotator(45, 60, 60)));
+    Spine.Add(FJoint(FName(TEXT("spine_03")), FRotator(0, 0, 0), FRotator(15, 20, 20)));
+    Spine.Add(FJoint(FName(TEXT("spine_02")), FRotator(0, 0, 0), FRotator(10, 10, 10)));
     Spine.Add(FJoint(FName(TEXT("spine_01")), FRotator(0, 0, 0), FRotator(5, 10, 10)));
 }
 
@@ -61,23 +61,23 @@ void UMainAnimInstance::AnimNotify_IdleEntry()
 {
     LeftFootIKAlpha = .95;
     RightFootIKAlpha = .95;
-    LeftHandIKAlpha = .2;
-    RightHandIKAlpha = .2;
+    LeftHandIKAlpha = .3;
+    RightHandIKAlpha = .3;
 }
 
 void UMainAnimInstance::TargetLerp(float DeltaTimeX, float Beta)
 {
     // Clamp Angles
     FRotator TargetRotation = TargetNeckRotation;
-    FRotator Sway = FRotator(-ThreatVector.X * 15, 0, ThreatVector.Y * 15);  
+    FRotator Sway = FRotator(-ThreatVector.X, 0, ThreatVector.Y);  
 
     Spine[0].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
-    TargetRotation = RotationAdjust(Spine, 0, TargetRotation);
-    Spine[1].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation) + Sway;
+    TargetRotation = RotationAdjust(Spine, 0, TargetRotation) + Sway;
+    Spine[3].TargetJointRotation = RotatorClamp(TargetRotation, Spine[1].ClampRotation);
     TargetRotation = RotationAdjust(Spine, 1, TargetRotation);
-    Spine[2].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
+    Spine[2].TargetJointRotation = RotatorClamp(TargetRotation, Spine[2].ClampRotation);
     TargetRotation = RotationAdjust(Spine, 2, TargetRotation);
-    Spine[3].TargetJointRotation = RotatorClamp(TargetRotation, Spine[0].ClampRotation);
+    Spine[1].TargetJointRotation = RotatorClamp(TargetRotation, Spine[3].ClampRotation);
 
     LerpTime = 0;
     if (LerpTime < LerpDuration)
@@ -85,8 +85,8 @@ void UMainAnimInstance::TargetLerp(float DeltaTimeX, float Beta)
         LerpTime += DeltaTimeX;
         NeckRotation = FMath::Lerp(NeckRotation, Spine[0].TargetJointRotation, LerpTime / 0.25);
         Spine3Rotation = FMath::Lerp(Spine3Rotation, Spine[1].TargetJointRotation, LerpTime / 0.4);
-        Spine2Rotation = FMath::Lerp(Spine2Rotation, Spine[2].TargetJointRotation, LerpTime / 0.45);
-        Spine1Rotation = FMath::Lerp(Spine1Rotation, Spine[3].TargetJointRotation, LerpTime / Beta);
+        Spine2Rotation = FMath::Lerp(Spine2Rotation, Spine[2].TargetJointRotation, LerpTime / 0.5);
+        Spine1Rotation = FMath::Lerp(Spine1Rotation, Spine[3].TargetJointRotation, LerpTime / 0.55);
     }
 }
 
@@ -147,7 +147,7 @@ void UMainAnimInstance::SphereTrace(float DeltaTimeX)
         GetWorld(),
         Start,
         End,
-        150,
+        160,
         ETraceTypeQuery::TraceTypeQuery1,
         false,
         IgnoredActors,
@@ -167,16 +167,27 @@ void UMainAnimInstance::SphereTrace(float DeltaTimeX)
         TargetNeckRotation = UKismetMathLibrary::FindLookAtRotation(Neck, TraceLocation);
 
         FVector ThreatDistance = Neck - TraceLocation;
-        if (ThreatDistance.Size() < 50 && Threat < ThreatMax) { Threat += 0.01; }
-        else if (ThreatDistance.Size() > 50 && Threat > ThreatMin) { Threat -= 0.01; }
-        ThreatVector = UKismetMathLibrary::GetDirectionUnitVector(TraceLocation, Neck);
+        if (ThreatDistance.Size() < ThreatThreshold && Threat < ThreatMax) {
+            Threat += 1;
+            ThreatVector = (UKismetMathLibrary::GetDirectionUnitVector(TraceLocation, Neck) * Threat * ThreatSensitivity) / ThreatDistance.Size();
+        }
+        else if (ThreatDistance.Size() > ThreatThreshold && Threat > ThreatMin) {
+            if (!ThreatVector.Equals(FVector(0, 0, 0), 1)) {
+                FVector Reset = FVector(ThreatVector.X / 100, ThreatVector.Y / 100, ThreatVector.Z / 100);
+                ThreatVector -= Reset;
+            }
+        }
 
     } else {
-        TargetNeckRotation = FRotator(0, 0, 0);
+        Threat = 1;
         ThreatVector = FVector(0, 0, 0);
-        Threat = 0;
-    }
 
+        if (!TargetNeckRotation.Equals(FRotator(0, 0, 0), 1)) {
+            FRotator Unwind = FRotator(TargetNeckRotation.Pitch / 30, TargetNeckRotation.Yaw / 30, TargetNeckRotation.Roll / 30);
+            TargetNeckRotation -= Unwind;
+        }
+    }
+    
     TargetLerp(DeltaTimeX, 0.5);
     return;
 }

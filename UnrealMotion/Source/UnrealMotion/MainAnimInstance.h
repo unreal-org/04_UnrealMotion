@@ -139,8 +139,10 @@ private:
 	float InterpSpeed = 2;
 
 	// Threat Variable
-	float Threat = 0;
-	float ThreatMin = 0;
-	float ThreatMax = 50;
+	float Threat = 1;
+	float ThreatMin = 1;
+	float ThreatMax = 100;
+	float ThreatThreshold = 150;
+	float ThreatSensitivity = 20;
 	FVector ThreatVector;
 };
